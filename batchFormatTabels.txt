@@ -1,0 +1,22 @@
+Sub formatTableStyle()
+'将word文档中指定表格（从第3个开始）的样式设置为“正文”样式
+'同时首行居中、加粗
+'其余表格内容单倍行距、段前段后无间距
+    Dim tbls As Tables, tb As Table, i As Integer
+    Set tbls = ActiveDocument.Tables
+    For i = 3 To tbls.Count
+        Set tb = tbls.Item(i)
+        '全表“正文”样式，并取消 1.5 倍行距
+        tb.Select
+        Selection.Style = ThisDocument.Styles("正文")
+        Selection.ParagraphFormat.SpaceBefore = 0
+        Selection.ParagraphFormat.SpaceAfter = 0
+        Selection.ParagraphFormat.LineSpacingRule = wdLineSpaceSingle
+        '首行加粗、居中
+        tb.Rows(1).Select
+        Selection.ParagraphFormat.Alignment = wdAlignRowCenter
+        tb.Rows(1).Range.Font.Bold = True
+        Set tb = Nothing
+    Next
+    Set tbls = Nothing
+End Sub
